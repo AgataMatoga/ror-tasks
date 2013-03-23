@@ -2,11 +2,11 @@ class TodoList
   attr_accessor :items
 
   class Item
-    attr_accessor :desc, :complete
+    attr_accessor :desc, :completed
   
     def initialize(item)
       @desc = item
-      @complete = false
+      @completed = false
     end  
 
     def to_s
@@ -50,11 +50,86 @@ class TodoList
   end
   
   def completed?(id)
-    @items[id].complete
+    @items[id].completed
   end
   
   def complete(id)
-    @items[id].complete = true
+    @items[id].completed = true
+  end
+
+  def completed
+    @completed_items = []
+    @items.each do |i|
+      if i.completed == true  
+        @completed_items << i.desc
+      end
+    end
+    @completed_items
+  end
+
+  def uncompleted
+    @uncompleted_items = []
+    @items.each do |i|
+      if i.completed == false
+        @uncompleted_items << i.desc       
+      end
+    end
+    @uncompleted_items
+  end
+  
+  def revert_two(id1, id2)
+    @cur_value = @items[id1]
+    @items[id1]= @items[id2]
+    @items[id2] = @cur_value 
+  end
+
+  def revert_all
+    @items.reverse!
+  end
+
+  def remove(id)
+    @items.delete_at(id)
+  end
+
+  def remove_completed
+    @items.each do |i|
+      if i.completed == true	
+	@items.delete(i)
+      end
+    end
+  end
+
+  def toggle_item(id)
+    if @items[id].completed == true
+      @items[id].completed = false
+    else
+      @items[id].completed = true
+    end 
+  end
+
+  def change_to_uncompleted(id)
+    @items[id].completed = false
+  end
+
+  def change_description(id, description)
+    @items[id].desc = description
+  end
+
+  def sort
+    @items.sort! { |a,b| a.desc <=> b.desc }
+  end
+
+  def convert_to_text
+    @list = ""
+    @items.each do |i|
+      if i.completed == true
+        @list = @list + "[x] #{i.to_s}\n" 
+      else
+        @list = @list + "[ ] #{i.to_s}\n"
+      end
+    end
+  @list.chomp!
   end
 
 end
+
