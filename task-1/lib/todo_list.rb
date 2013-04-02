@@ -58,29 +58,17 @@ class TodoList
   end
 
   def completed
-    @completed_items = []
-    @items.each do |i|
-      if i.completed == true  
-        @completed_items << i.desc
-      end
-    end
-    @completed_items
+    @completed_items = @items
+    @completed_items.delete_if{ |i| i.completed == false }
   end
 
   def uncompleted
-    @uncompleted_items = []
-    @items.each do |i|
-      if i.completed == false
-        @uncompleted_items << i.desc       
-      end
-    end
-    @uncompleted_items
+    @uncompleted_items = @items
+    @uncompleted_items.delete_if{ |i| i.completed == true } 
   end
   
   def revert_two(id1, id2)
-    @cur_value = @items[id1]
-    @items[id1]= @items[id2]
-    @items[id2] = @cur_value 
+    @items[id1], @items[id2] = @items[id2], @items[id1]
   end
 
   def revert_all
@@ -92,19 +80,11 @@ class TodoList
   end
 
   def remove_completed
-    @items.each do |i|
-      if i.completed == true	
-	@items.delete(i)
-      end
-    end
-  end
+    @items.delete_if {|i| i.completed == true }    
+ end
 
-  def toggle_item(id)
-    if @items[id].completed == true
-      @items[id].completed = false
-    else
-      @items[id].completed = true
-    end 
+  def toggle_item(id)  
+    @items[id].completed = !@items[id].completed 
   end
 
   def change_to_uncompleted(id)
