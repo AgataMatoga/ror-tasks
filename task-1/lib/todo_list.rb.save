@@ -1,0 +1,31 @@
+class TodoList
+
+  # Initialize the TodoList with +items+ (empty by default).
+  def initialize(items=[])
+    if items == nil
+      raise IllegalArgument
+    else
+      @items = items
+      @tasks = {}
+      @items.each do |item|
+        @tasks[item] = false
+      end
+    end
+  end
+
+  def size
+    @items.size
+  end
+
+
+
+  def empty?
+    @items.empty?
+  end
+
+  def <<(new_item)
+    @items << new_item
+    @tasks[new_item] = false
+  end
+  
+end
