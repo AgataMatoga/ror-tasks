@@ -1,11 +1,14 @@
 require 'active_record'
 
 class TodoItem < ActiveRecord::Base
-  belongs_to :todolist
+
+  attr_accessible :title, :description, :list_id
+
+  belongs_to :todo_list
+
   validates :title, :list_id, :presence => true
-  validates :title, :greater_than_or_equal_to => 
-:5, :less_than_or_equal_to => :30
-  validates :description, :less_than_or_equal_to => :255
-  validates :format => { :with => /\A\d{2}\/\d{2}\/\d{4}\z/ }
+  validates :title, :length => {:minimum => 1, :maximum => 30}
+  validates :description, :length => {:maximum => 255}
+  validates :due_date, :format => { :with => /\A\d{2}\/\d{2}\/\d{4}\z/ }
 end
 
