@@ -14,5 +14,35 @@ class User < ActiveRecord::Base
   validates :password, :confirmation => true, :length => { :minimum => 10} 
   validates :password_confirmation, :presence => true
   validates :email, :format => { :with => /^(|(([A-Za-z0-9]+_+)|([A-Za-z0-9]+\-+)|([A-Za-z0-9]+\.+)|([A-Za-z0-9]+\++))*[A-Za-z0-9]+@((\w+\-+)|(\w+\.))*\w{1,63}\.[a-zA-Z]{2,6})$/i }
+
+  def self.find_by_surname(surname)
+    where(:surname => surname)
+  end
+
+  def self.find_by_email(email)
+    where(:email => email)
+  end
+
+  def self.authenticate(email, password)
+    user = find_by_email(email)
+    if user.password == password
+      return true
+    else
+       user.update_attributes(:failed_login_count, user.failed_login_count += 1)
+      return false
+    end
+  end
+
+  def self.is_suspicious
+    if self.failed_login_count > 2
+      return true
+    else
+      return false
+    end
+  end
+
+  def self.find_suspicious_users
+    where("failed_login_count > ?", 2) 
+  end
 end
 

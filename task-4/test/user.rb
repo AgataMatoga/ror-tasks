@@ -18,13 +18,14 @@ describe User do
     }
   end
 
+# validations
+
  it "should save user with valid attributes" do
    valid_user = User.new(@valid_attributes)
    valid_user.save
    p valid_user
    valid_user.should be_valid 
  end
-
 
   it "should have a non-empty name" do
     empty_name = User.new(@valid_attributes.merge(:name => ""))
@@ -76,9 +77,41 @@ describe User do
     empty_failed_login_count.should_not be_valid  
   end
 
+# queries
+
   it "should find user by surname" do
+    user =  User.find_by_surname("Kowalska")
+    user.surname.should == "Kowalska"
+    user.name.should == "Kasia"
+  end
+
+  it "should find user by email" do
+    user =  User.find_by_email("Kasia.Kowalska@gmail.com")
+    user.surname.should == "Kowalska"
+    user.name.should == "Kasia"
+  end
+
+
+  it "should find user by prefix of his/her surname" do 
     
-  end 
+  end
+
+  it "should authenticate user using email and password (should use password encryption)" do 
+     User.authenticate("Kasia.Kowalska@gmail.com", "Kasia987").should == true
+  end
+ 
+  it "should find suspicious users with more than 2 failed_login_counts" do
+    User.authenticate("Kasia.Kowalska@gmail.com", "Kasia111")
+    User.authenticate("Kasia.Kowalska@gmail.com", "Kasia111")
+    User.authenticate("Kasia.Kowalska@gmail.com", "Kasia111")
+    user = User.find_by_email("Kasia.Kowalska@gmail.com")
+    user.is_suspicious.should == true
+    User.find_suspicious_users.count.should == 1
+  end
+  
+  it "should group users by number of failed login attempts" do
+  end
+  
 
 end
 

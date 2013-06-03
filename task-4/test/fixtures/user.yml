@@ -1,0 +1,12 @@
+first_user:
+  name: "Kasia"
+  surname: "Kowalska"
+  email: "Kasia.Kowalska@gmail.com"
+  password: "kasia987"
+  failed_login_count: 4
+second_user:
+  name: "Jan"
+  surname: "Nowak"
+  email: "Jan.Nowak@op.pl"
+  password: "jasko1991"
+  failed_login_count: 0

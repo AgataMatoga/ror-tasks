@@ -1,5 +1,5 @@
 require_relative 'test_helper'
-require_relative '../lib/user'
+require_relative '../lib/todo_item'
 
 describe User do
   include TestHelper
@@ -8,11 +8,16 @@ describe User do
     @valid_attributes = {
       :title => "Zakupy",
       :list_id => "2",
-      :description => 'IdŸ do kauflanda i kup kilo ziemniaków',
+      :description => 'Idz do kauflanda i kup kilo ziemniaków',
       :due_date => '03/06/2013'
      }
   end
 
+  it "should save list with valid attributes" do
+    valid_item = TodoIList.new(@valid_attributes)
+    valid_item.save
+    valid_item.should be_valid
+  end
 
   it "should have a non-empty title" do
     empty_title = TodoItem.new(@valid_attributes.merge(:title => ""))

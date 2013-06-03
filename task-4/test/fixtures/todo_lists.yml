@@ -1,0 +1,9 @@
+first_list:
+  title: "Maj-lista1"
+  user: first_user
+second_list:
+  title: "Czerwiec-lista2"
+  user: second_user
+third_list:
+  title: "Lipiec-lista3"
+  user: first_user

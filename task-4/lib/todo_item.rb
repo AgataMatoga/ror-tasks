@@ -2,7 +2,7 @@ require 'active_record'
 
 class TodoItem < ActiveRecord::Base
 
-  attr_accessible :title, :description, :list_id
+  attr_accessible :title, :description, :list_id, :due_date
 
   belongs_to :todo_list
 
