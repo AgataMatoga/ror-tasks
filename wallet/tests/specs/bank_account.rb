@@ -4,8 +4,7 @@ require_relative '../lib/bank_account'
 require_relative '../lib/exceptions'
 
 describe BankAccount do
-  subject(:bank_account)            { BankAccount.new(:number, :balance, :currency, :bank_name) }
-  let(:number)               { 1234 5677 8965 2245 1234 12 }
+  subject(:bank_account)            { BankAccount.new(:balance, :currency, :bank_name) }
   let(:balance)    { 400 }
   let{:currency}	{ :PLN }
   let{:bank_name}   { "mbank" }

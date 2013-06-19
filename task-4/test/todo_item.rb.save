@@ -12,49 +12,47 @@ describe TodoItem do
       :title => "Zakupy",
       :todo_list_id => 2,
       :description => 'Idz do kauflanda i kup kilo ziemniakow',
-      :date_due_unchecked => '01/06/2013'
+      :date_due => '01/06/2013'
      }
   end
 
   
   # validations
   
-  it "should save item with valid attributes" do
-    
-    valid_item = get_todo_item.new(@valid_attributes)
+  it "should save list with valid attributes" do    
+    valid_item = TodoItem.new(@valid_attributes)
     valid_item.save
-    puts valid_item.errors.full_messages
     p valid_item
     valid_item.should be_valid
   end
 
   it "should have a non-empty title" do
-    empty_title = get_todo_item.new(@valid_attributes.merge(:title => ""))
+    empty_title = TodoItem.new(@valid_attributes.merge(:title => ""))
     empty_title.should_not be_valid
   end
 
   it "should have a title which is less than 30 characters long" do
-    too_long_title = get_todo_item.new(@valid_attributes.merge(:title => "kontantynopolitaczykkiewicznajchgsdkfghvjsudgbfjvhbsdjgvhbsjdfgbvsdfbvhdfad"))
+    too_long_title = TodoItem.new(@valid_attributes.merge(:title => "kontantynopolitaczykkiewicznajchgsdkfghvjsudgbfjvhbsdjgvhbsjdfgbvsdfbvhdfad"))
     too_long_title.should_not be_valid
   end
   
   it "should have a title with more than 5 characters long" do
-    too_short_title = get_todo_item.new(@valid_attributes.merge(:title => "ab"))
+    too_short_title = TodoItem.new(@valid_attributes.merge(:title => "ab"))
     too_short_title.should_not be_valid
   end
 
   it "should have a non-empty list it belongs to" do
-    empty_list_id = get_todo_item.new(@valid_attributes.merge(:todo_list_id => ""))
+    empty_list_id = TodoItem.new(@valid_attributes.merge(todo_list_id => ""))
     empty_list_id.should_not be_valid
   end
 
   it "should have a description up to 255 characters long that might be empty" do
-    too_long_description = get_todo_item.new(@valid_attributes.merge(:description => "a" * 256))
+    too_long_description = TodoItem.new(@valid_attributes.merge(:description => "a" * 256))
     too_long_description.should_not be_valid
   end
 
   it "should have a due date in dd/mm/yyyy format, that might be empty" do
-    wrong_date_format = get_todo_item.new(@valid_attributes.merge(:date_due_unchecked => "13.05.2014"))
+    wrong_date_format = TodoItem.new(@valid_attributes.merge(:date_due => "13.05.2014"))
     wrong_date_format.should_not be_valid
   end
   
@@ -62,18 +60,18 @@ describe TodoItem do
   # queries
   
   it "should find items with a specific word in a description (not just a substring)" do
-	todo_items = get_todo_item.find_by_word_in_description("Obrusy")
+	todo_items = TodoItem.find_by_word_in_description("Obrusy")
 	todo_items.count.should == 1
   end
   
   it "should find items with description exceeding 100 characters" do
-	todo_items = get_todo_item.find_by_too_long_description
+	todo_items = TodoItem.find_by_too_long_description
 	todo_items.count.should == 1
   end
 
   it "should paginate items with 5 items per page and order them by title" do
-	todo_items_page_1 = get_todo_item.paginate(1)
-	todo_items_page_2 = get_todo_item.paginate(2)
+	todo_items_page_1 = TodoItem.paginate(1)
+	todo_items_page_2 = TodoItem.paginate(2)
 	todo_items_page_1.count.should == 5
 	todo_items_page_2.count.should == 2
 	todo_items_page_1[0].title.should == "Aktualna_lista7_3"
@@ -82,44 +80,39 @@ describe TodoItem do
 
   it "should find all items that belong to a given user (use eager loading)" do
     user = User.find_by_email("Jan.Nowak@op.pl")
-    todo_items = get_todo_item.find_by_user(user)
+    todo_items = TodoItem.find_by_user(user)
     todo_items.count.should == 2
   end
 
   it "should find items that belong to a specific user that are due to midnight of a specific day" do
     user = User.find_by_email("Jan.Nowak@op.pl")
-    todo_items = get_todo_item.find_by_user_and_date_due(user, Date.parse("29/06/2013"))
+    todo_items = TodoItem.find_by_user_and_date_due(user, Date.parse("29/06/2013"))
     todo_items.count.should == 1
   end
 
   
   it "should find items that are due for a specific day" do
-    todo_items = get_todo_item.find_by_date_due(Date.parse("22/05/2013"))
+    todo_items = TodoItem.find_by_date_due(Date.parse("22/05/2013"))
     todo_items.count.should == 1
   end
 
   it "should find items that are due for a specific week" do
-    todo_items = get_todo_item.find_by_due_week(2013,21)
-    todo_items.count.should == 3
+    todo_items = TodoItem.find_by_due_week(user,Time.parse("22/06/2013"))
+    todo_items.count.should == 1
   end
 
   it "should find items that are due for a specific month" do
-    todo_items = get_todo_item.find_by_due_year_and_month(2013,06)
+    todo_items = TodoItem.find_by_due_year_and_month(2013,06)
     todo_items.count.should == 2
   end
 
   it "should find items that are overdue" do
-    todo_items = get_todo_item.find_overdue(Date.parse("23/05/2013"))
+    todo_items = TodoItem.find_overdue
     todo_items.count.should == 4
   end
 
   it "should find items that are due in the next n hours" do
-    todo_items = get_todo_item.find_by_due_date_in_next_n_hours(Time.new(2013, 05, 21, 19, 00, 00), 12)
-	todo_items.count.should == 1
-  end
-  
-  def get_todo_item
-	TodoItem
+    todo_items = TodoItem.find_by_due_date_in_next_n_hours(24)
   end
 
 end

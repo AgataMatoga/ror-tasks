@@ -1,24 +1,44 @@
+#encoding: utf-8
+
 first_todo_item:
+  id: 1
   title: "Zakupy1"
-  date_due: <%= Time.parse("16/05/2013") %>
-  todo_list: first_list
-  description: "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+  date_due: <%= Date.parse("16/05/2013") %>
+  todo_list_id: 1
+  description: "Kup chleb, mleko, jajka i proszek do prania!"
 second_todo_item:
-  title: "Sprzątanie2"
-  date_due: <%= Time.parse("17/06/2013") %>
-  todo_list: second_list
-  description: "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+  id: 2
+  title: "Sprzatanie2"
+  date_due: <%= Date.parse("17/06/2013") %>
+  todo_list_id: 1
+  description: "Jak prawidłowo prać tkaninę obrusową? Jest to nielada kłopot dla wielu gospodyń. Obrusy są zwykle koloru białego. Dlatego niezmiernie ważny jest dobór odpowiedniego proszku do prania. Wybieramy proszek przeznaczony wyłącznie do prania białych rzeczy. Unikniemy w ten sposób niechcianego zabrudzenia tkaniny podczas prania. Kolejnym istotnym krokiem jest dostosowanie temperatury prania do naszych tkanin obrusowych."
 third_todo_item:
+  id: 3
   title: "Nauka1"
-  date_due: <%= Time.parse("28/07/2013") %>
-  todo_list: third_list
-  description: " Itaque earum rerum hic tenetur a sapiente delectus, ut aut reiciendis voluptatibus maiores alias consequatur aut perferendis doloribus asperiores repellat"
+  date_due: <%= Date.parse("28/07/2013") %>
+  todo_list_id: 2
+  description: "Naucz się liczyć do 100."
 fourth_todo_item:
+  id: 4
   title: "Remont2"
-  date_due: <%= Time.parse("29/06/2013") %>
-  todo_list: second_list
-  description: "At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga. Et harum quidem rerum facilis est et expedita distinctio."
+  date_due: <%= Date.parse("29/06/2013") %>
+  todo_list_id: 2
+  description: "Pomaluj ściany w pokoju  i zmontuj szafkę."
 fifth_todo_item:
-  title: "Projekt1"
-  date_due: <%= Time.parse("20/05/2013") %>
-  todo_list: first_list
+  id: 5
+  title: "Ruby1"
+  date_due: <%= Date.parse("20/05/2013") %>
+  todo_list: 3
+  description: "Zrób wszystkie taski."
+sixth_todo_item:
+  id: 6
+  title: "Byleco6_1"
+  date_due: <%= Date.parse("22/05/2013") %>
+  todo_list_id: 3
+  description: "Nie mam już pomysłów."
+seventh_todo_item:
+  id: 7
+  title: "Aktualna_lista7_3"
+  date_due: <%= Date.parse("21/05/2013") %>
+  todo_list_id: 3
+  description: "Ostatnia rzecz do zrobienia :P"

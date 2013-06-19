@@ -3,7 +3,7 @@ require 'active_record'
 
 class TodoItem < ActiveRecord::Base
   
-  attr_accessible :title, :description, :todo_list_id, :date_due_unchecked
+  attr_accessible :title, :description, :todo_list_id, :date_due
   attr_accessor :date_due_unchecked
   belongs_to :todo_list
 
@@ -11,12 +11,9 @@ class TodoItem < ActiveRecord::Base
   validates :title, :length => {:minimum => 5, :maximum => 30}
   validates :description, :length => {:maximum => 255}
   validate :date_due_validation
-  DATE_VALIDATION_RE = /[0-3][0-9]\/[0-1][0-9]\/[0-9]{2}(?:[0-9]{2})/
 
   def date_due_validation
-    unless date_due_unchecked.match(DATE_VALIDATION_RE)
-      errors.add(:date_due, 'date must be in dd/mm/yyyy format') 
-    end
+    errors.add(:date_due, 'date must be in dd/mm/yyyy format') if (date_due_unchecked =~ /[0-3][0-9]\/[0-1][0-9]\/[0-9]{2}(?:[0-9]{2})/)==nil
   end
   
   def self.find_by_list_id(list_id)
@@ -70,24 +67,8 @@ class TodoItem < ActiveRecord::Base
     where("date_due BETWEEN ? AND ?", Time.new(year, month), Time.new(year, month).end_of_month)
   end
 
-  def self.find_overdue(date)
-    where("date_due < ?", date)
+  def self.find_overdue
+    where("date_due < ?", Time.now)
   end
-  
-  def self.find_by_due_date_in_next_n_hours(date_from, hours)
-    date_to = date_from + hours.hours
-	where("date_due BETWEEN ? AND ?", date_from, date_to)
-  end
-  
-  def self.find_by_due_week(year, week)
-     date_from = Date.parse(Date.commercial(year,week, 1).to_s)
-     date_to = Date.parse(Date.commercial(year, week,7 ).to_s)
-	 where("date_due BETWEEN ? AND ?", date_from, date_to)
-  end
-  
-  def self.find_beetwen_dates(date_from, date_to)
-    where("date_due BETWEEN ? AND ?", date_from, date_to)
-  end
-  
 end
 

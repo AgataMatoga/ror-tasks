@@ -2,19 +2,11 @@ module WalletTestHelper
 
   # transfering money
   
-  def set_bank_account(bank_name, number, currency, balance)
+  def set_bank_account_balance(bank, currency, balance)
     @bank_accounts ||= []
-    @bank_accounts << BankAccount.new(name, number, currency, balance)	 
+    @bank_accounts << BankAccount.new(bank, currency, balance)	 
   end
-  
-  def find_bank_account(bank_account_number)
-	@bank_accounts.find{ |b| b.number == bank_account_number }
-  end
-  
-  def find_bank_account_currency(bank_account_number)
-	find_bank_account(bank_account_number).currency
-  end
-  
+    
   def set_wallet_balance(wallet_accounts)
     @wallet_accounts ||= []
     wallet_accounts.each do |currency,balance|
@@ -22,45 +14,65 @@ module WalletTestHelper
     end
   end
   
-  def transfer_money_to_wallet(bank_account_number, money)
-	remove_money_from_bank_account(bank_account_number, money)
-	currency = find_bank_account_currency(bank_account_number)
-	add_wallet_money(currency, money)
-  end
-  
-  def add_wallet_money(currency, money)
-	find_wallet_account(currency).add_money(money)
-  end 
-  
-  def add_money(money)
-    self.balance += money
-  end
+  def transfer_money_to_wallet(bank, currency, money)
+    bank_account = find_bank_account(bank,currency)
+	  bank_account.withdraw_money(money)
+	  wallet_account = find_wallet_account(currency)
+	  wallet_account.supply_money_to_wallet(currency, money)
+  end    
   
   def find_wallet_account(currency)
-	@wallet_accounts.find{ |w| w.currency == currency)
-  end
-  
-  def remove_money_from_wallet(currency, money)
-    find_wallet_account(currency).withdraw(money)
-  end
-  
-  def remove_money_from_bank_account(bank_account_number, money)
-    find_bank_account(bank_account_number).withdraw(money)
-  end
-  
-  def withdraw(money)
-	self.balance -= money
-  end
-  
-  def add_bank_account_money(bank_account_number, money)
-    find_bank_account(bank_account_number).add_money(money)
+     @wallet_accounts.find{|w| w.currency == currency}
   end
 
-  def transfer_all_money_back(bank_account_number)
-    currency = find_bank_account_currency(bank_account_number)
+  def find_bank_account(bank, currency)
+     @bank_accounts.find{|a| a.bank == bank && a.currency == currency}
+  end
+  
+  def transfer_all_money_back(bank, currency)
     money = get_wallet_balance(currency)
-    add_bank_account_money(bank_account_number, money)
-    remove_money_from_wallet(currency, money)
+    add_bank_account_money(bank, money)
+    withdraw_money_from_wallet(currency, money)
+  end
+  
+   # buying and selling stocks
+
+  def set_stock_market(location, currency)
+    @stock_markets ||= []
+    stock_makrets.each do |location, currency|
+      @stock_markets << StockMarket.new(country, currency)
+    end
+  end
+  
+  def set_stock_price(stock)
+    @stocks ||= []
+    stocks.each do |location,(company, price)|
+      currency = Market.find_by_location(loaction).currency
+      @stocks << Stock.new(company,price, currency)
+    end
+  end
+
+  def set_company_shares(stock_shares)
+    @stock_shares ||= []
+    stock_shares.each do |company, share|
+      @stock_shares << StockShare.new(company, share)
+    end
+  end
+
+  def get_company_shares(company)
+    @stock_shares.find{|a| a.company == company }
+    @stock_shares.share
+  end
+  
+  def buy_stocks(amount, company, currency)
+    @stock = Stock.find_by_company(company)
+    @wallet_account = WalletAccount.find_by_currency(@stock.currency)
+    money = amount * @stock.price
+    if @wallet_account == nil 
+      Wallet_Account.find_by_balance()
+    elsif @wallet_account.balance >= money
+      buy_company_shares(@stock, amount)
+    end
   end
   
   # exchanging money
@@ -89,54 +101,6 @@ module WalletTestHelper
   def find_rate(from_currency,to_currency)
     @rates.find{|r| r.from_currency == from_currency &&
         r.to_currency == to_currency}
-  end
-
-  # buying and selling stocks
-
-  def set_stock_market(location, currency)
-    @stock_markets ||= []
-    stock_makrets.each do |location, currency|
-      @stock_markets << StockMarket.new(location, currency)
-    end
-  end
-  
-  def set_stock_price(stock)
-    @stocks ||= []
-    stocks.each do |location,(company, price)|
-      @stocks << Stock.new(location,company,price)
-    end
-  end
-
-  def set_company_shares(stock_shares)
-    @stock_shares ||= []
-    stock_shares.each do |company, share|
-      @stock_shares << StockShare.new(company, share)
-    end
-  end
-
-  def get_company_shares(company)
-    @stock_shares.find{|a| a.company == company }
-    @stock_shares.share
-  end
-  
-  def buy_stocks(ammount, company, currency)
-	stock = @stocks.find(:company=>company)
-	remove_money_from_wallet(currency, ammount* stock.price)
-	get_company_shares(company) += ammount
-  end
-  
-  def buy_stock_with_limit()
-    
-  end
-
-  def sell_stocks
-  end
-
-  def sell_all_stocks
-  end
+  end 
 
 end
-end
-
-
-# czy w zale¿noœci od lokalizacji gie³dy nale¿y zrobiæ osobne konteksty czy jakoœ uw

@@ -2,7 +2,7 @@ require 'active_record'
 require 'active_record/fixtures'
 require 'yaml'
 
-ActiveRecord::Base.establish_connection(YAML::load_file("config/db.yml"))
+ActiveRecord::Base.establish_connection(YAML::load_file("#{File.dirname(__FILE__)}/../config/db.yml"))
 
 module TestHelper
   def self.included(child)
@@ -17,4 +17,10 @@ module TestHelper
       end
     end
   end
+
+
+  def fixture_id(key)
+    ActiveRecord::Fixtures.identify(key.to_sym)
+  end
+
 end

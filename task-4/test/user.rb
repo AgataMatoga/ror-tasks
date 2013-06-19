@@ -1,6 +1,8 @@
 
 require_relative 'test_helper'
 require_relative '../lib/user'
+require_relative '../lib/todo_list'
+require_relative '../lib/todo_item'
 
 describe User do
   include TestHelper
@@ -93,23 +95,25 @@ describe User do
 
 
   it "should find user by prefix of his/her surname" do 
-    
+    user = User.find_by_surnames_prefix("K")
+    user.count.should == 1
+    user[0].surname.should == "Kowalska"  
   end
 
   it "should authenticate user using email and password (should use password encryption)" do 
-     User.authenticate("Kasia.Kowalska@gmail.com", "Kasia987").should == true
+     User.authenticate("Kasia.Kowalska@gmail.com", "kasia987").should == true
   end
  
   it "should find suspicious users with more than 2 failed_login_counts" do
-    User.authenticate("Kasia.Kowalska@gmail.com", "Kasia111")
-    User.authenticate("Kasia.Kowalska@gmail.com", "Kasia111")
-    User.authenticate("Kasia.Kowalska@gmail.com", "Kasia111")
     user = User.find_by_email("Kasia.Kowalska@gmail.com")
+    user.name.should == "Kasia"
     user.is_suspicious.should == true
     User.find_suspicious_users.count.should == 1
   end
   
   it "should group users by number of failed login attempts" do
+    users = User.find_by_number_of_failed_login_attempts(4)
+    users.count.should == 1
   end
   
 

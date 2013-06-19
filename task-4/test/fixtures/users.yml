@@ -1,0 +1,15 @@
+#encoding: utf-8 
+first_user:
+  id: 1
+  name: "Kasia"
+  surname: "Kowalska"
+  email: "Kasia.Kowalska@gmail.com"
+  password: "kasia987"
+  failed_login_count: 4
+second_user:
+  id: 2
+  name: "Jan"
+  surname: "Nowak"
+  email: "Jan.Nowak@op.pl"
+  password: "jasko1991"
+  failed_login_count: 0
