@@ -1,7 +1,7 @@
 describe "wallet_account" do
   include TestHelper
   
-  subject(:wallet_account)            { Wallet_account.new(currency, balance) }
+  subject(:wallet_account)            { WalletAccount.new(currency, balance) }
   let(:currency)               { "PLN" }
   let(:balance)    { 100 }
   
